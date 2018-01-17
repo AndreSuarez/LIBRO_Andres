@@ -195,7 +195,7 @@ Por último la recopilación sucesiva de datos pretende estimar un ponderado que
 			\subsubsection{Características}
 Previamente se realizó una breve explicación sobre el papel que cumple, dentro de los subcircuitos, los elementos usados para el sistema de bioimpedanciometría. Por lo tanto, a continuación se pretende entrar en detalle acerca del rol de dichos subcircuitos en proceso de toma de datos y su posterior análisis.  
 
-				\paragraph{Componentes}
+				\paragraph{Funcionamiento}
 				\hfill\break
 Para un contexto más general el circuito de Bioimpedanciometría cumple varios roles fundamentales en la lógica del sistema completo,  y su propósito se dividirá en secciones  para su comprensión global.
 Para todos los procesos que se enlistaran posteriormente, el tratamiento de datos sigue, en principio, el mismo ciclo, la diferencia entre estos es el uso final de la información obtenida.
@@ -203,8 +203,68 @@ De acuerdo a lo mencionado el circuito integrado AD5933 almacena internamente lo
 Una vez la totalidad de los datos sean enviados por el método de $I^{2}C$  del IC al procesador de propósito general, en este caso el Atmega328-PA sabemos no solo por lo dado en la hoja de datos del AD5933 [6], sino también por lo analizado teóricamente en diversos textos [8], que:
 $$Z = X+jY;$$, lo que equivale a:  $$Z=r\angle\Theta;$$
 Estas ecuaciones representan las formas rectangular y polar respectivamente de una impedancia, por lo cual es posible a partir de una hallar la otra, lo que en consecuencia nos lleva a:
-$$r = \sqrt{x^{2}+y^{2}};$$ $$\Theta = tan^{-1}(\dfrac{y}{x})  $$								
+$$r = \sqrt{x^{2}+y^{2}};$$ $$\Theta = tan^{-1}(\dfrac{y}{x});  $$								
 			
+					\subparagraph{Detección de Placa de Retorno}
+					\hfill\break
+En una primera instancia, el senso inicial implica realizar un control de seguridad en la placa de retorno, para permitir que se lleve a cabo el proceso requerido, esto en pocas palabras es el sistema de protección primario contra fallos. Todo esto se debe al tipo de placa que se usa en los procedimientos de electrocirugía como retorno, estas se componen de dos secciones de metal separadas que hacen posible identificar que su postura sea correcta.
+
+El valor de impedancia que es detectado por el sistema varía de acuerdo a la posición que tenga el paciente con respecto a dicha placa, es así como por ejemplo, ubicar o sujetar solamente una porción de contacto de la placa de retorno altera el valor resistivo sensado por el Bioimpedanciometro, con respecto al contacto completo del tejido involucrado de la misma placa.  
+ Con ello en mente se realizaron las mediciones respectivas para establecer cuál era el valor de impedancia pertinente para considerar como adecuada la colocación de la placa de retorno. 
+
+OJO CON LA FOTO !!!!
+
+					\subparagraph{Detección de Impedancia Tisular}
+					\hfill\break
+Para este inciso se utiliza la misma teoría aplicada en la detección de placa de retorno, pues el proceso que se lleva a cabo es análogo a este con la única modificación centrada en el procesamiento de los datos recopilados. Es así como, mientras para la placa de retorno el estado del dispositivo varia si la impedancia se halla en un rango correcto, para este nuevo senso cualquier dato es plausible, pues en principio la impedancia entre los diferentes tejidos varía de acuerdo al tipo de tejido, su composición e incluso el organismo en cuestión, por ello los datos son usados para determinar la potencia apropiada del sistema de salida y realizar la correspondiente validación del objetivo asociado a esta sección.
+Para realizar el proceso descrito previamente  se usan dos electrodos distintos. Por un lado se hace uso de la placa de retorno como electrodo pasivo o tierra del sistema de Bioimpedanciometría, y ya que en este punto, al conocer la impedancia entre los conductores de dicha placa y haber realizado un cambio de estado, de ser válido el dato del proceso “Detección de Placa de Retorno”, no es necesario emplear tal placa como elementos separados, por lo tanto, se cortocircuitan sus conductores y se utiliza la totalidad de su área para disminuir el efecto que causa el paso de corriente sobre el paciente. Tenemos por otra parte que el rol de electrodo activo lo cumple el lápiz o bisturí de corte, en donde se cierra el circuito para finalmente obtener un dato de impedancia lo más preciso posible entre dos puntos (tejido implicado en el proceso quirúrgico). 
+
+OJO CON LA FOTO !!!!
+
+Es prudente aclarar que estos procesos se llevan a cabo previo a cada incisión (corte o coagulación) que se realice durante la electrocirugía, procurando en todo momento priorizar la seguridad y eficiencia del dispositivo en uso.
+
+				\paragraph{Pruebas Realizadas}
+				\hfill\break
+Fundamentalmente los datos recopilados previamente serán parte del análisis detallado acerca de la validación de uno de los objetivos específicos planteados para el proyecto. Este objetivo es el “Control de Potencia Automático”, por lo tanto, las pruebas se enfocaron en confrontar la información obtenida del sensado realizado sobre los tejidos involucrados, con la aplicación de potencia correcta, que de acuerdo a cada incisión posee su valor respectivo.
+Por su parte, para calibrar esta sección del dispositivo, se tuvieron en cuenta medidas en tiempo real tanto sobre tejido vivo humano, como sobre tejido no vivo animal, en búsqueda de representar las condiciones de una intervención quirúrgica factibles en la realidad.
+La adquisición de datos se separó en dos pruebas independientes explicadas a continuación, en donde en primer lugar se concertó el rango de impedancias, de acuerdo a su postura generadas en la placa de retorno, y posteriormente se corroboro los valores de impedancia tisular estándar establecidos en la Biomedicina, además de la dependencia de estos datos con respecto a la distancia entre electrodos, el tipo de tejido y su posición. 
+\\\
+
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+Dato & Placa Completa & Placa Espalda & Media Placa & 1/4 de Placa & Placa Completa* \\ 
+\hline 
+1 & 140 & 135 & 483 & 615 & 139 \\ 
+\hline 
+2 & 163 & 131 & 472 & 651 & 131 \\ 
+\hline 
+3 & 149 & 129 & 507 & 626 & 202 \\ 
+\hline 
+4 & 135 & 134 & 510 & 614 & 177 \\ 
+\hline 
+5 & 149 & 134 & 459 & 683 & 140 \\ 
+\hline 
+6 & 140 & 151 & 492 & 642 & 145 \\ 
+\hline 
+7 & 134 & 154 & 507 & 655 & 188 \\ 
+\hline 
+8 & 183 & 164 & 439 & 654 & 179 \\ 
+\hline 
+9 & 171 & 141 & 427 & 649 & 176 \\ 
+\hline 
+10 & 180 & 170 & 476 & 610 & 151 \\ 
+\hline
+Promedio & 154,4 & 144,3 &477,2 & 639,9 & 162,8 \\ 
+\hline
+\end{tabular}
+\\\
+
+En la tabla podemos apreciar la variación en la impedancia debido al área de contacto correspondiente en cada caso, con lo cual concluimos que a mayor área, menor resistencia al flujo de corriente sobre el tejido evaluado.
+
+
+
+
+
 
 
 
