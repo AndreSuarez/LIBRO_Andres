@@ -176,7 +176,7 @@ Del mismo modo el IC AD5933 es propenso a verse afectado por corrientes de polar
 
 					\subparagraph{Switch de Calibración}
 					\hfill\break
-En esta sección del circuito, la secuencia seguida es una recomendación del fabricante, la cual consiste en cambiar de posición un switch ubicado en la salida de transmisión del sistema, o lo que es igual, donde es emitida la señal de excitación que pasara sobre la carga, colocando una resistencia de calibración que le indicara al circuito una escala restringida de impedancias (en nuestro caso entre 100Ω y 1KΩ), para posteriormente tomar el dato de impedancia desconocido y traducirlo en información procesable con la cual se hará más adelante el control de potencia.				
+En esta sección del circuito, la secuencia seguida es una recomendación del fabricante, la cual consiste en cambiar de posición un switch ubicado en la salida de transmisión del sistema, o lo que es igual, donde es emitida la señal de excitación que pasara sobre la carga, colocando una resistencia de calibración que le indicara al circuito una escala restringida de impedancias (en nuestro caso entre 100$\Omega $ y 1K$\Omega $), para posteriormente tomar el dato de impedancia desconocido y traducirlo en información procesable con la cual se hará más adelante el control de potencia.				
 				
 					\subparagraph{Recopilación de Datos Analógicos}
 					\hfill\break				
@@ -200,8 +200,10 @@ Previamente se realizó una breve explicación sobre el papel que cumple, dentro
 Para un contexto más general el circuito de Bioimpedanciometría cumple varios roles fundamentales en la lógica del sistema completo,  y su propósito se dividirá en secciones  para su comprensión global.
 Para todos los procesos que se enlistaran posteriormente, el tratamiento de datos sigue, en principio, el mismo ciclo, la diferencia entre estos es el uso final de la información obtenida.
 De acuerdo a lo mencionado el circuito integrado AD5933 almacena internamente los valores de los registros real e imaginario una vez finalizado cada periodo de sensado, siendo que cada nuevo senso sobre una cierta impedancia, refresca o cambia el dato almacenado en tales registros.
-Una vez la totalidad de los datos sean enviados por el método de I²C  del IC al procesador de propósito general, en este caso el Atmega328-PA sabemos no solo por lo dado en la hoja de datos del AD5933 [6], sino también por lo analizado teóricamente en diversos textos [8], que:
-$$Z = X + jY; ó Z = r \angle \Theta;$$								
+Una vez la totalidad de los datos sean enviados por el método de $I^{2}C$  del IC al procesador de propósito general, en este caso el Atmega328-PA sabemos no solo por lo dado en la hoja de datos del AD5933 [6], sino también por lo analizado teóricamente en diversos textos [8], que:
+$$Z = X+jY;$$, lo que equivale a:  $$Z=r\angle\Theta;$$
+Estas ecuaciones representan las formas rectangular y polar respectivamente de una impedancia, por lo cual es posible a partir de una hallar la otra, lo que en consecuencia nos lleva a:
+$$r = \sqrt{x^{2}+y^{2}};$$ $$\Theta = tan^{-1}(\dfrac{y}{x})  $$								
 			
 
 
